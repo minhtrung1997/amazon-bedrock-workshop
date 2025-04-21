@@ -4,7 +4,7 @@ import time
 import json
 
 suffix = random.randrange(200, 900)
-boto3_session = boto3.session.Session()
+boto3_session = boto3.session.Session(region_name="us-east-1")
 region_name = boto3_session.region_name
 iam_client = boto3_session.client('iam')
 account_number = boto3.client('sts').get_caller_identity().get('Account')
@@ -28,16 +28,17 @@ def create_bedrock_execution_role(bucket_name):
             {
                 "Effect": "Allow",
                 "Action": [
-                    "bedrock:InvokeModel",
+                    "bedrock:InvokeModel"
                 ],
                 "Resource": [
-                    f"arn:aws:bedrock:{region_name}::foundation-model/amazon.titan-embed-text-v1",
-                    f"arn:aws:bedrock:{region_name}::foundation-model/amazon.titan-embed-text-v2:0"
+                    f"arn:aws:bedrock:{region_name}:{account_number}:foundation-model/amazon.titan-embed-text-v1",
+                    f"arn:aws:bedrock:{region_name}:{account_number}:foundation-model/amazon.titan-embed-text-v2:0"
                 ]
             }
         ]
     }
-
+    print(json.dumps(foundation_model_policy_document, indent=2))
+    print(f"Region: {region_name}, Account: {account_number}")
     s3_policy_document = {
         "Version": "2012-10-17",
         "Statement": [
