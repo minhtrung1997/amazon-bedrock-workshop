@@ -4,7 +4,7 @@ import time
 import json
 
 suffix = random.randrange(200, 900)
-boto3_session = boto3.session.Session(region_name="us-east-1")
+boto3_session = boto3.session.Session()
 region_name = boto3_session.region_name
 iam_client = boto3_session.client('iam')
 account_number = boto3.client('sts').get_caller_identity().get('Account')
@@ -31,8 +31,8 @@ def create_bedrock_execution_role(bucket_name):
                     "bedrock:InvokeModel"
                 ],
                 "Resource": [
-                    f"arn:aws:bedrock:{region_name}:{account_number}:foundation-model/amazon.titan-embed-text-v1",
-                    f"arn:aws:bedrock:{region_name}:{account_number}:foundation-model/amazon.titan-embed-text-v2:0"
+                    f"arn:aws:bedrock:{region_name}::foundation-model/amazon.titan-embed-text-v1",
+                    f"arn:aws:bedrock:{region_name}::foundation-model/amazon.titan-embed-text-v2:0"
                 ]
             }
         ]
